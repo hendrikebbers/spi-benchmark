@@ -1,2 +1,2 @@
 # spi-benchmark
-benchmark for Java service loader
+Benchmark for Java service loader
