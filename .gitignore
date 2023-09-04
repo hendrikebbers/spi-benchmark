@@ -25,3 +25,7 @@ replay_pid*
 
 */target/**
 /.idea/*
+
+
+/thousands-service-implementation-module-one/src/main/java/**
+/thousands-service-implementation-module-two/src/main/java/**
