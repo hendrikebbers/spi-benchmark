@@ -24,7 +24,7 @@ hs_err_pid*
 replay_pid*
 
 */target/**
-/.idea/*
+/.idea/**
 
 
 /thousands-service-implementation-module-one/src/main/java/**
