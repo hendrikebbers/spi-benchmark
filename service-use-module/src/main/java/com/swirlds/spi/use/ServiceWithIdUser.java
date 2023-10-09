@@ -2,15 +2,20 @@ package com.swirlds.spi.use;
 
 import com.swirlds.spi.services.ServiceWithId;
 import com.swirlds.spi.services.ServiceWithName;
+import java.util.List;
 import java.util.ServiceLoader;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServiceWithIdUser {
+
+    private static List<ServiceWithId> allServices = new CopyOnWriteArrayList<>();
+
 
     public static void loadAndUseServices() {
         ServiceLoader<ServiceWithId> serviceLoader = ServiceLoader.load(ServiceWithId.class);
         serviceLoader.stream().forEach(serviceProvider -> {
             ServiceWithId service = serviceProvider.get();
-            System.out.println("ID: " + service.getId() + " - provided by '" + service.getClass().getSimpleName() + "' loaded from module '" + service.getClass().getModule().getName() + "'");
+            allServices.add(service);
         });
     }
 
@@ -18,7 +23,7 @@ public class ServiceWithIdUser {
         ServiceLoader<ServiceWithId> serviceLoader = ServiceLoader.loadInstalled(ServiceWithId.class);
         serviceLoader.stream().forEach(serviceProvider -> {
             ServiceWithId service = serviceProvider.get();
-            System.out.println("ID: " + service.getId() + " - provided by '" + service.getClass().getSimpleName() + "' loaded from module '" + service.getClass().getModule().getName() + "'");
+            allServices.add(service);
         });
     }
 

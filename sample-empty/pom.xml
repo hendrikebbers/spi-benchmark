@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>sample-thousands-pre-module</artifactId>
+  <artifactId>sample-empty</artifactId>
 
   <dependencies>
     <dependency>
@@ -20,13 +20,13 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>thousands-service-implementation-module-one</artifactId>
+      <artifactId>service-implementation-module-one</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>thousands-service-implementation-module-two</artifactId>
+      <artifactId>service-implementation-module-two</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
@@ -53,7 +53,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>com.swirlds.spi.sample.ThousandsSample</mainClass>
+          <mainClass>com.swirlds.spi.sample.Sample</mainClass>
         </configuration>
       </plugin>
     </plugins>

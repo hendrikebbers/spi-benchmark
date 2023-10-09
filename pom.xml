@@ -27,6 +27,7 @@
     <module>sample-thousands-module</module>
     <module>sample-pre-module</module>
     <module>sample-thousands-pre-module</module>
+    <module>sample-empty</module>
   </modules>
 
   <build>
