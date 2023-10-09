@@ -7,12 +7,15 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.swirlds.spi.services.ServiceWithId;
 import com.swirlds.spi.services.ServiceWithName;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -27,20 +30,38 @@ public class GenerateThousandsOfServices {
     public static final String SERVICE_WITH_ID_SUFFIX = ServiceWithId.class.getSimpleName();
     public static final String SERVICE_WITH_NAME_SUFFIX = ServiceWithName.class.getSimpleName();
 
-    private static final Path SOURCE_SET_ONE = Path.of("thousands-service-implementation-module-one/src/main/java");
-    private static final Path SOURCE_SET_TWO = Path.of("thousands-service-implementation-module-two/src/main/java");
+    private static final Path SOURCE_SET_ONE = Path.of("service-implementation-one/src/main/java");
+    private static final Path SOURCE_SET_TWO = Path.of("service-implementation-two/src/main/java");
 
-    private static final int NUMBER_OF_SERVICES = 10_000;
+    private static final int NUMBER_OF_SERVICES = 10;
 
     public static void main(String[] args) throws Exception {
-        generateModule(SOURCE_SET_ONE, PACKAGE_ONE_NAME, "Foo");
-        generateModule(SOURCE_SET_TWO, PACKAGE_TWO_NAME, "Bar");
+
+        Files.walk(SOURCE_SET_ONE)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+
+        Files.walk(SOURCE_SET_TWO)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+
+        if(args == null || args.length == 0) {
+            generateModule(SOURCE_SET_ONE, PACKAGE_ONE_NAME, "Foo", NUMBER_OF_SERVICES);
+            generateModule(SOURCE_SET_TWO, PACKAGE_TWO_NAME, "Bar", NUMBER_OF_SERVICES);
+        } else {
+            String number = args[0];
+            final int numberOfServices = Integer.parseInt(number);
+            generateModule(SOURCE_SET_ONE, PACKAGE_ONE_NAME, "Foo", numberOfServices);
+            generateModule(SOURCE_SET_TWO, PACKAGE_TWO_NAME, "Bar", numberOfServices);
+        }
     }
 
-    private static void generateModule(final Path sourceSet, final String name, String classNamePrefix) {
+    private static void generateModule(final Path sourceSet, final String name, String classNamePrefix, final int numberOfServices) {
         final List<JavaFile> withIdFiles = new ArrayList<>();
         final List<JavaFile> withNameFiles = new ArrayList<>();
-        IntStream.range(0, NUMBER_OF_SERVICES).forEach(i -> {
+        IntStream.range(0, numberOfServices).forEach(i -> {
             try {
                 final JavaFile serviceWithId = createServiceWithId(name + ".set" + (i % 100),
                         classNamePrefix + i + SERVICE_WITH_ID_SUFFIX);
@@ -62,9 +83,9 @@ public class GenerateThousandsOfServices {
         final Path moduleInfoPath = sourceSet.resolve("module-info.java");
         try (FileWriter fileWriter = new FileWriter(moduleInfoPath.toFile())) {
             fileWriter.write("module " + name + " {\n");
-            fileWriter.write("    requires " + ServiceWithName.class.getModule().getName() + ";\n");
-            fileWriter.write("    requires " + Generated.class.getModule().getName() + ";\n");
-            fileWriter.write("    requires " + AutoService.class.getModule().getName() + ";\n");
+            fileWriter.write("    requires com.swirlds.spi.services;\n");
+            fileWriter.write("    requires java.compiler;\n");
+            fileWriter.write("    requires com.google.auto.service;\n");
             if(!withIdFiles.isEmpty()) {
                 withIdFiles.stream().map(f -> f.packageName + "." + f.typeSpec.name)
                         .reduce((a, b) -> a + ", " + b)

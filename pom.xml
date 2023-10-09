@@ -17,17 +17,11 @@
 
   <modules>
     <module>code-generator</module>
-    <module>service-definition-module</module>
-    <module>service-use-module</module>
-    <module>service-implementation-module-one</module>
-    <module>service-implementation-module-two</module>
-    <module>thousands-service-implementation-module-one</module>
-    <module>thousands-service-implementation-module-two</module>
-    <module>sample-module</module>
-    <module>sample-thousands-module</module>
-    <module>sample-pre-module</module>
-    <module>sample-thousands-pre-module</module>
-    <module>sample-empty</module>
+    <module>service-definition</module>
+    <module>spi-loader</module>
+    <module>service-implementation-one</module>
+    <module>service-implementation-two</module>
+    <module>sample-spi</module>
   </modules>
 
   <build>
