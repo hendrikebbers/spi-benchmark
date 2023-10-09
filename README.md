@@ -7,6 +7,8 @@ services that should be loaded by SPI.
 
 ## First results
 
+Execution on M1 Max MacBook with 64 GB RAM and local SSD
+
 ### sample-empty
 ```bash
 % hyperfine 'java -jar app.jar' 
