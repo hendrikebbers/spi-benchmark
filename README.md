@@ -4,6 +4,11 @@ Benchmark for Java service loader
 The `code-generator` module contains the `GenerateThousandsOfServices` class that must be executed to create all the 
 services that should be loaded by SPI.
 
+Execution:
+
+```bash
+% hyperfine --prepare './mvnw -P custom-service-count clean verify -DnumberOfServices=100' 'java -jar sample-spi/target/app.jar'
+```
 
 ## First results
 
